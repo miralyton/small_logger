@@ -102,73 +102,84 @@
 #endif
 
 #if defined(NDEBUG) || LOG_LEVEL < 4
-#define LOG_DEBUG(str, ...)
+#define LOGF_DEBUG(file, str, ...)
 #else
-#define LOG_DEBUG(str, ...)                                                    \
+#define LOGF_DEBUG(file, str, ...)                                             \
     do {                                                                       \
-        if (isatty(fileno(stdout))) {                                          \
-            printf(LOG_CODE_DEBUG "[DEBUG] %s:%d: " str LOG_CODE_CLEAR,        \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+        if (isatty(fileno(file))) {                                            \
+            fprintf(file,                                                      \
+                    LOG_CODE_DEBUG "[DEBUG] %s:%d: " str LOG_CODE_CLEAR,       \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         } else {                                                               \
-            printf("[DEBUG] %s:%d: " str,                                      \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+            fprintf(file,                                                      \
+                    "[DEBUG] %s:%d: " str,                                     \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         }                                                                      \
     } while (0)
 #endif
+#define LOG_DEBUG(str, ...) LOGF_DEBUG(stdout, str, __VA_ARGS__)
 
 #if LOG_LEVEL >= 3
-#define LOG_INFO(str, ...)                                                     \
+#define LOGF_INFO(file, str, ...)                                              \
     do {                                                                       \
-        if (isatty(fileno(stdout))) {                                          \
-            printf(LOG_CODE_INFO "[INFO] %s:%d: " str LOG_CODE_CLEAR,          \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+        if (isatty(fileno(file))) {                                            \
+            fprintf(file,                                                      \
+                    LOG_CODE_INFO "[INFO] %s:%d: " str LOG_CODE_CLEAR,         \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         } else {                                                               \
-            printf("[INFO] %s:%d: " str,                                       \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+            fprintf(file,                                                      \
+                    "[INFO] %s:%d: " str,                                      \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         }                                                                      \
     } while (0)
+
 #else
-#define LOG_INFO(...)
+#define LOGF_INFO(file, str, ...)
 #endif /* LOG_LEVEL >= 3 */
+#define LOG_INFO(str, ...) LOGF_INFO(stdout, str, __VA_ARGS__)
 
 #if LOG_LEVEL >= 2
-#define LOG_WARN(str, ...)                                                     \
+#define LOGF_WARN(file, str, ...)                                              \
     do {                                                                       \
-        if (isatty(fileno(stdout))) {                                          \
-            printf(LOG_CODE_WARN "[WARN] %s:%d: " str LOG_CODE_CLEAR,          \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+        if (isatty(fileno(file))) {                                            \
+            fprintf(file,                                                      \
+                    LOG_CODE_WARN "[WARN] %s:%d: " str LOG_CODE_CLEAR,         \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         } else {                                                               \
-            printf("[WARN] %s:%d: " str,                                       \
-                   __FILE__,                                                   \
-                   __LINE__ __VA_OPT__(, ) __VA_ARGS__);                       \
+            fprintf(file,                                                      \
+                    "[WARN] %s:%d: " str,                                      \
+                    __FILE__,                                                  \
+                    __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         }                                                                      \
     } while (0)
 #else
-#define LOG_WARN(...)
+#define LOGF_WARN(file, str, ...)
 #endif /* LOG_LEVEL >= 2 */
+#define LOG_WARN(str, ...) LOGF_WARN(stdout, str, __VA_ARGS__)
 
 #if LOG_LEVEL >= 1
-#define LOG_ERR(str, ...)                                                      \
+#define LOGF_ERR(file, str, ...)                                               \
     do {                                                                       \
-        if (isatty(fileno(stderr))) {                                          \
-            fprintf(stderr,                                                    \
+        if (isatty(fileno(file))) {                                            \
+            fprintf(file,                                                      \
                     LOG_CODE_ERR "[ERROR] %s:%d: " str LOG_CODE_CLEAR,         \
                     __FILE__,                                                  \
                     __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         } else {                                                               \
-            fprintf(stderr,                                                    \
+            fprintf(file,                                                      \
                     "[ERROR] %s:%d: " str,                                     \
                     __FILE__,                                                  \
                     __LINE__ __VA_OPT__(, ) __VA_ARGS__);                      \
         }                                                                      \
     } while (0)
 #else
-#define LOG_ERR(...)
+#define LOGF_ERR(file, str, ...)
 #endif /* LOG_LEVEL >= 1*/
+#define LOG_ERR(str, ...) LOGF_ERR(stderr, str, __VA_ARGS__)
 
 #endif /* SMALL_LOGGER_H_ */
